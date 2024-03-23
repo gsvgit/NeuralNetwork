@@ -6,8 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Math.fs" />
+        <Compile Include="Common.fs" />
         <Compile Include="LinearAlgebra.fs" />
+        <Compile Include="Activation.fs" />
         <Compile Include="Linear.fs" />
+        <Compile Include="Convolution.fs" />
+        <Compile Include="Flatten.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 

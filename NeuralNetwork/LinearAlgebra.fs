@@ -13,16 +13,18 @@ type Matrix<'t>(rows:uint, columns:uint) =
             sprintf $"%A{a}")
         |> String.concat "\n"
         
-let vXm (vector:array<'a>) (matrix:Matrix<'b>) (opMult:'a -> 'b -> 'c) (opAdd: 'c -> 'c -> 'c) =
-    let result = Array.zeroCreate (int matrix.Columns)
-    if vector.Length <> (int matrix.Rows)
-    then failwithf $"Can not multiply vector of size {vector.Length} and matrix with {matrix.Rows} rows"
-    for i in 0u..matrix.Columns - 1u do
-        for j in 0u..matrix.Rows - 1u do
-            result[int i] <- opAdd result[int i] (opMult vector[int j] matrix[int j, int i])
+let mXm (leftMatrix:Matrix<'a>) (rightMatrix:Matrix<'b>) (opMult:'a -> 'b -> 'c) (opAdd: 'c -> 'c -> 'c) =
+    let result = Matrix(leftMatrix.Rows, rightMatrix.Columns)
+    if leftMatrix.Columns <> rightMatrix.Rows
+    then failwithf $"Can not multiply vector of size {leftMatrix.Columns} and matrix with {rightMatrix.Rows} rows"
+    for i in 0u..leftMatrix.Rows - 1u do
+        for j in 0u..rightMatrix.Columns - 1u do
+            for k in 0u..rightMatrix.Rows - 1u do 
+                result[int i, int j] <- opAdd result[int i, int j] (opMult leftMatrix[int i, int k] rightMatrix[int k, int j])
     result
     
 module Matrix = 
+    let map2 f m1 m2 = m1
     let map (f: 'a -> 'b) (matrix:Matrix<'a>) =
         let res = Matrix<'b>(matrix.Rows, matrix.Columns)
         for i in 0u..matrix.Rows - 1u do
@@ -35,3 +37,5 @@ module Matrix =
             for j in 0u..columns - 1u do
                 res[int i, int j] <- f i j
         res
+        
+    let conv input kernel = input
